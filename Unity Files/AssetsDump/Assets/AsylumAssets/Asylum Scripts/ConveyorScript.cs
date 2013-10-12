@@ -5,6 +5,7 @@ public class ConveyorScript : MonoBehaviour {
  
     public float speed;
 	public float impact;
+	public AudioClip impactSound;
 	
 	// Player contact behaviour
   	void OnControllerColliderHit(ControllerColliderHit hit) {
@@ -21,6 +22,7 @@ public class ConveyorScript : MonoBehaviour {
 		// Player/Conveyor object contact behaviour
         if (hit.gameObject.tag == "Obstacle")
 		{
+			audio.PlayOneShot(impactSound);
 			// Apply force pushing player backwards
 			float conveyorVelocity = impact * Time.deltaTime;
 			hit.controller.transform.Translate(new Vector3(0.0f, 0.0f, 

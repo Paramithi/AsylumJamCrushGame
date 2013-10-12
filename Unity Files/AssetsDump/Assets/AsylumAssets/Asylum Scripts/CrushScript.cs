@@ -4,11 +4,11 @@ using System.Collections;
 public class CrushScript : MonoBehaviour {
 	
 	// Crusher fields
-	public float fCrushRate; //in seconds
-	public float fStartTime; //in seconds
-	public AudioSource asCrushSound; // Sound for crushing machine
-	public AudioSource asGameOver; // Sound for game over (squish)
-	public int obsInRow;
+	public float crushRate; //in seconds
+	public float startTime; //in seconds
+	public AudioClip crushSound; // Sound for crushing machine
+	public AudioClip gameOver; // Sound for game over (squish)
+	public int obsInRow; // must be synced with SpawnScript.cs
 	int destroyedObjs = 0;
 	
 	// Menu fields
@@ -26,7 +26,7 @@ public class CrushScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		InvokeRepeating("Crush", fStartTime , fCrushRate);
+		InvokeRepeating("Crush", startTime , crushRate);
 	}
 	
 	// Update is called once per frame
@@ -39,12 +39,10 @@ public class CrushScript : MonoBehaviour {
 		// Player enters danger zone
 		if(other.tag.Equals("Player"))
 		{
-			//Debug.Log("Player!");
 			bPlayerInRange = true; // update player state
 		}
 		else if (other.tag.Equals("Obstacle"))
 		{
-			//Debug.Log("Player!");
 			bObjectsInRange = true; // update objects state
 		}
 	}
@@ -60,13 +58,16 @@ public class CrushScript : MonoBehaviour {
 		// Obstacle exits danger zone (shouldn't happen)
 		if(other.tag.Equals("Obstacle"))
 		{
+			// Destroy object
 			Destroy (other.gameObject);
 		}
 		
 	}
 	
+	// Object is in danger zone
 	void OnTriggerStay(Collider other)
 	{
+		// Pseudo-destroy event
 		if(bDestroy)
 		{
 			if(other.tag.Equals("Obstacle"))
@@ -85,16 +86,22 @@ public class CrushScript : MonoBehaviour {
 	
 	// Periodic crushing method
 	void Crush()
-	{
-		Debug.Log("SMASH!");
+	{	
+		audio.PlayOneShot(crushSound);
+	
+		// Send "Crush" message to scripts
+		GameObject.Find("Near Region").GetComponent("NearScript").SendMessage("CrushSignal");
+		
 		if(bPlayerInRange)
 		{
 			if(!bGameOver) // Trigger game over state (once)
 			{
-				//Debug.Log("Game Over!");
+				audio.PlayOneShot(gameOver);
 				bGameOver = true;
 			}
 		}
+		
+		// Pseudo-trigger for destroy event
 		if(bObjectsInRange)
 			bDestroy = true;
 	}
@@ -124,7 +131,6 @@ public class CrushScript : MonoBehaviour {
 			// Quit the game
 			if(GUILayout.Button ("Quit")){
 				Application.Quit ();
-				Debug.Log("This part works!");
 			}
 			
 			GUILayout.EndArea();
