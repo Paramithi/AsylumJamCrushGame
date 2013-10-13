@@ -107,6 +107,7 @@ public class CrushScript : MonoBehaviour {
 			if(!bGameOver) // Trigger game over state (once)
 			{
 				audio.PlayOneShot(gameOver);
+				GameObject.Find("GameOverScreen").guiTexture.enabled = true;
 				bGameOver = true;
 			}
 		}

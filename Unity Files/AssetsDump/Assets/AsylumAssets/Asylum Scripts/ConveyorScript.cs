@@ -46,6 +46,7 @@ public class ConveyorScript : MonoBehaviour {
 		{
 			if(!bGameOver)
 			{
+				GameObject.Find("GameOverScreen").guiTexture.enabled = true;
 				audio.PlayOneShot(fallSound);
 				bGameOver = true;
 			}
