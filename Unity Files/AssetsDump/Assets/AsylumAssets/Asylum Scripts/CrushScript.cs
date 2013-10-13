@@ -4,6 +4,7 @@ using System.Collections;
 public class CrushScript : MonoBehaviour {
 	
 	// Crusher fields
+	public float crushIntensity;
 	public float crushRate; //in seconds
 	public float startTime; //in seconds
 	public AudioClip crushSound; // Sound for crushing machine
@@ -91,6 +92,15 @@ public class CrushScript : MonoBehaviour {
 	
 		// Send "Crush" message to scripts
 		GameObject.Find("Near Region").GetComponent("NearScript").SendMessage("CrushSignal");
+		
+		// Shake camera (controller)
+		float fPosZ = GameObject.Find ("First Person Controller").transform.position.z;
+		fPosZ = 280 - fPosZ;
+		float fShakeIntensity = fPosZ * crushIntensity / 50;
+		
+		GameObject.Find ("First Person Controller").GetComponent
+			            ("CameraShakeScript").SendMessage
+				        ("DoShake", fShakeIntensity);
 		
 		if(bPlayerInRange)
 		{
