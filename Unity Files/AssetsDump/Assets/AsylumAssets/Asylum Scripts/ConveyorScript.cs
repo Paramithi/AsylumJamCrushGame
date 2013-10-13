@@ -17,6 +17,7 @@ public class ConveyorScript : MonoBehaviour {
 	// Player contact behaviour
   	void OnControllerColliderHit(ControllerColliderHit hit) {
  
+		/*
 		// Player/Conveyor object contact behaviour
         if (hit.gameObject.tag == "Conveyor")
 		{
@@ -27,7 +28,7 @@ public class ConveyorScript : MonoBehaviour {
 				hit.controller.Move(new Vector3(0.0f, 0.0f, 
 				-conveyorVelocity));
 			}
-		}
+		}*/
 		
 		// Player/Conveyor object contact behaviour
         if (hit.gameObject.tag == "Obstacle")
@@ -59,7 +60,11 @@ public class ConveyorScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		float conveyorVelocity = speed * Time.deltaTime;
+		
+		CharacterController controller = GetComponent<CharacterController>();
+		controller.Move(new Vector3(0.0f, 0.0f, 
+				-conveyorVelocity));
 	}
 	
 	// Game over GUI screen
